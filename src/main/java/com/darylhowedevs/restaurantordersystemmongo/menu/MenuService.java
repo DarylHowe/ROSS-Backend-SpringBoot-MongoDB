@@ -1,6 +1,5 @@
 package com.darylhowedevs.restaurantordersystemmongo.menu;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -10,7 +9,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.darylhowedevs.restaurantordersystemmongo.item.Item;
-import com.darylhowedevs.restaurantordersystemmongo.item.Main;
 import com.mongodb.BasicDBObject;
 
 @Service
@@ -20,6 +18,14 @@ public class MenuService {
 	
 	public MenuService(MongoTemplate mongoTemplate) {
 		this.mongoTemplate = mongoTemplate;
+	}
+	
+	public List<Menu> getAllMenuNames(){
+
+		Query q = new Query();
+		q.fields().include("menuName");
+		List<Menu> menuNamesList = mongoTemplate.find(q, Menu.class);
+		return menuNamesList;	
 	}
 
 	

@@ -23,14 +23,6 @@ public class Item {
 		this.itemId = Integer.toString(itemIdStatic++);
 	}
 	
-	/*
-	public Item(String itemName, double itemPrice, String itemType, String itemId) {
-		this.itemName = itemName;
-		this.itemPrice = itemPrice;
-		this.itemType = itemType;
-		this.itemId = itemId;
-	}
-	*/
 
 	@Override
 	public String toString() {

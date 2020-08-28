@@ -1,12 +1,10 @@
 package com.darylhowedevs.restaurantordersystemmongo.menu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.darylhowedevs.restaurantordersystemmongo.item.Item;
-import com.darylhowedevs.restaurantordersystemmongo.item.Main;
 
 
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/menus")
 public class MenuController {
 	
@@ -44,6 +42,12 @@ public class MenuController {
 	@GetMapping("/getallmenus")
 	public List<Menu> getAllMenusMongo() {
 		return menuRepository.findAll();
+	}
+	
+	// http://localhost:8080/menus/getallmenunames
+	@GetMapping("/getallmenunames")
+	public List<Menu> getAllMenuNames() {		
+		return menuService.getAllMenuNames();
 	}
 	
 	
@@ -98,16 +102,14 @@ public class MenuController {
 		menuService.deleteMenuItemById(menuName, itemId);
 	}
 	
-	
-	
-	
+
 	// http://localhost:8080/menus/getallitems
 	@GetMapping("/getallitems")
 	public List<Item> getAllItems() {
 		
 		List<Menu> menuList = menuRepository.findAll();
 				
-		List<Item> allItems = null;
+		List<Item> allItems = new ArrayList<>();
 		for (int i = 0; i < menuList.size(); i++) {
 
 			for (int j = 0; j < menuList.get(i).getMenuList().size(); j++) {

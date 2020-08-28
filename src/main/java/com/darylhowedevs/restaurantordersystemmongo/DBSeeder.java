@@ -14,14 +14,20 @@ import com.darylhowedevs.restaurantordersystemmongo.item.Main;
 import com.darylhowedevs.restaurantordersystemmongo.item.Starter;
 import com.darylhowedevs.restaurantordersystemmongo.menu.Menu;
 import com.darylhowedevs.restaurantordersystemmongo.menu.MenuRepository;
+import com.darylhowedevs.restaurantordersystemmongo.order.Order;
+import com.darylhowedevs.restaurantordersystemmongo.server.Server;
+import com.darylhowedevs.restaurantordersystemmongo.server.ServerRepository;
 
 @Component
 public class DBSeeder implements CommandLineRunner {
 
 	private MenuRepository menuRepository;
+	private ServerRepository serverRepository;
 
-	public DBSeeder(MenuRepository menuRepository) {
+
+	public DBSeeder(MenuRepository menuRepository, ServerRepository serverRepository) {
 		this.menuRepository = menuRepository;
+		this.serverRepository = serverRepository;
 	}
 
 	@Override
@@ -101,6 +107,31 @@ public class DBSeeder implements CommandLineRunner {
 
 		List<Menu> menuList = Arrays.asList(menu01, menu02, menu03, menu04);
 		menuRepository.saveAll(menuList);
+		
+		serverRepository.deleteAll();
+		
+		Server server01 = new Server("Daryl Howe");
+		Server server02 = new Server("Sandy Luc");
+		Server server03 = new Server("Paul Rodgers");
+		
+		List<Item> itemList = new ArrayList<>();
+		itemList.add(item04);
+		itemList.add(item12);
+		itemList.add(item29);
 
+		Order order01 = new Order(10, itemList);
+		server01.createOrder(order01);
+		server01.closeOrderByTableNumber(10);
+		
+		List<Item> itemList02 = new ArrayList<>();
+		itemList.add(item03);
+		itemList.add(item14);
+		itemList.add(item26);
+
+		Order order02 = new Order(20, itemList02);
+		server01.createOrder(order02);
+		
+		List<Server> serverList = Arrays.asList(server01, server02, server03);
+		serverRepository.saveAll(serverList);
 	}
 }
