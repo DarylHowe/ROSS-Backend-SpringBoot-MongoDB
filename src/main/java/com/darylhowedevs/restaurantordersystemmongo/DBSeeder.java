@@ -12,6 +12,7 @@ import com.darylhowedevs.restaurantordersystemmongo.item.DrinkNonAlcohol;
 import com.darylhowedevs.restaurantordersystemmongo.item.Item;
 import com.darylhowedevs.restaurantordersystemmongo.item.Main;
 import com.darylhowedevs.restaurantordersystemmongo.item.Starter;
+import com.darylhowedevs.restaurantordersystemmongo.kitchen.KitchenRepository;
 import com.darylhowedevs.restaurantordersystemmongo.menu.Menu;
 import com.darylhowedevs.restaurantordersystemmongo.menu.MenuRepository;
 import com.darylhowedevs.restaurantordersystemmongo.order.Order;
@@ -23,11 +24,13 @@ public class DBSeeder implements CommandLineRunner {
 
 	private MenuRepository menuRepository;
 	private ServerRepository serverRepository;
+	private KitchenRepository kitchenRepository;
 
 
-	public DBSeeder(MenuRepository menuRepository, ServerRepository serverRepository) {
+	public DBSeeder(MenuRepository menuRepository, ServerRepository serverRepository, KitchenRepository kitchenRepository) {
 		this.menuRepository = menuRepository;
 		this.serverRepository = serverRepository;
+		this.kitchenRepository = kitchenRepository;
 	}
 
 	@Override
@@ -69,7 +72,7 @@ public class DBSeeder implements CommandLineRunner {
 		menu02.addItemToMenu(item13);
 		menu02.addItemToMenu(item14);
 
-		Menu menu03 = new Menu("Drink No Alcohol");
+		Menu menu03 = new Menu("Drinks");
 		Item item15 = new DrinkNonAlcohol("Water", 0);
 		Item item16 = new DrinkNonAlcohol("Coke", 2.50);
 		Item item17 = new DrinkNonAlcohol("7UP", 2.50);
@@ -86,7 +89,7 @@ public class DBSeeder implements CommandLineRunner {
 		menu03.addItemToMenu(item20);
 		menu03.addItemToMenu(item21);
 
-		Menu menu04 = new Menu("Drink Alcohol");
+		Menu menu04 = new Menu("Alcohol");
 		Item item22 = new DrinkAlcohol("Red Wine Small", 8.50);
 		Item item23 = new DrinkAlcohol("Red Wine Large", 11.50);
 		Item item24 = new DrinkAlcohol("Heiniken Pint", 5.50);
@@ -124,14 +127,36 @@ public class DBSeeder implements CommandLineRunner {
 		server01.closeOrderByTableNumber(10);
 		
 		List<Item> itemList02 = new ArrayList<>();
-		itemList.add(item03);
-		itemList.add(item14);
-		itemList.add(item26);
+		itemList02.add(item03);
+		itemList02.add(item14);
+		itemList02.add(item26);
 
 		Order order02 = new Order(20, itemList02);
 		server01.createOrder(order02);
 		
 		List<Server> serverList = Arrays.asList(server01, server02, server03);
 		serverRepository.saveAll(serverList);
+		
+		
+		// **************** KITCHEN 
+		
+		kitchenRepository.deleteAll();
+		
+		List<Item> itemList03 = new ArrayList<>();
+		itemList03.add(item10);
+		itemList03.add(item12);
+		itemList03.add(item11);
+		Order order03 = new Order(33, itemList03);
+		
+		List<Item> itemList04 = new ArrayList<>();
+		itemList04.add(item03);
+		itemList04.add(item22);
+		itemList04.add(item19);
+		Order order04 = new Order(41, itemList04);
+		order04.setIsReadyToBeServed(true);
+		
+		kitchenRepository.save(order03);
+		kitchenRepository.save(order04);
+		
 	}
 }

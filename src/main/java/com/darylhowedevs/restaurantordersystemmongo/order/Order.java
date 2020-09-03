@@ -4,13 +4,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.darylhowedevs.restaurantordersystemmongo.item.Item;
 
 
+@Document(collection = "Kitchen")
 public class Order {
 
+	
+	@Id
+	private String orderId;
 	private static int orderNumberStatic;
-	private int orderId;
+	
 	private int tableNumber;
 	private double totalPrice;
 	private List<Item> itemList = new ArrayList<>();
@@ -18,25 +25,30 @@ public class Order {
 	private String timeStamp;
 	private Date date;
 	
+	
 	public Order() {	
-		orderId = orderNumberStatic++;
+		orderId = Integer.toString(orderNumberStatic++);
 		date = new Date();
 		timeStamp = date.toString();
+		updateTotal();
 	}
 
 	public Order(int tableNumber, List<Item> itemList) {
 		this.tableNumber = tableNumber;
 		this.itemList = itemList;
-		orderId = orderNumberStatic++;
+		orderId = Integer.toString(orderNumberStatic++);
 		date = new Date();
 		timeStamp = date.toString();
+		updateTotal();
 	}
+	
 
 	public Order(int tableNumber) {
 		this.tableNumber = tableNumber;
-		orderId = orderNumberStatic++;
+		orderId = Integer.toString(orderNumberStatic++);
 		date = new Date();
 		timeStamp = date.toString();
+		updateTotal();
 	}
 
 	public void addItem(Item item) {
@@ -154,11 +166,11 @@ public class Order {
 		this.itemList = orderList;
 	}
 
-	public int getOrderId() {
+	public String getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(int orderId) {
+	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
 
