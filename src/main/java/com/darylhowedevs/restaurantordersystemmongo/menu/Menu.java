@@ -7,13 +7,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.darylhowedevs.restaurantordersystemmongo.item.Item;
 
+/**
+ * Menu - A menu holds a list of items.
+ */
 @Document(collection = "Menus")
 public class Menu {
 
 	@Id
 	protected String menuId;
 	protected String menuName;
-	protected ArrayList<Item> menuList = new ArrayList<>();
+	protected ArrayList<Item> menuItemList = new ArrayList<>();
 
 	// MongoDB will auto assign a 'menuId'
 	public Menu(String menuName) {
@@ -21,41 +24,35 @@ public class Menu {
 	}
 
 	public void addItemToMenu(Item item) {
-		menuList.add(item);
-	}
-
-	public void removeItemFromMenuByIndex(int index) {
-		menuList.remove(index);
+		menuItemList.add(item);
 	}
 
 	public void removeItemFromMenuByName(String itemName) {
-		for (int i = 0; i < menuList.size(); i++) {
-			if (itemName.equals(menuList.get(i).getItemName())) {
-				menuList.remove(i);
+		for (int i = 0; i < menuItemList.size(); i++) {
+			if (itemName.equals(menuItemList.get(i).getItemName())) {
+				menuItemList.remove(i);
 			}
 		}
 	}
 
 	public Item getItemByIndex(int index) {
-		return menuList.get(index);
+		return menuItemList.get(index);
 	}
 
 	public Item getItemByName(String itemName) {
-
 		Item item = null;
+		
+		for (int i = 0; i < menuItemList.size(); i++) {
 
-		for (int i = 0; i < menuList.size(); i++) {
-
-			if (itemName.equalsIgnoreCase(menuList.get(i).getItemName())) {
-				item = menuList.get(i);
+			if (itemName.equalsIgnoreCase(menuItemList.get(i).getItemName())) {
+				item = menuItemList.get(i);
 			}
 		}
-
 		return item;
 	}
 
 	public int getMenuSize() {
-		return menuList.size();
+		return menuItemList.size();
 	}
 
 	public String getMenuName() {
@@ -69,9 +66,9 @@ public class Menu {
 	public String getMenuId() {
 		return menuId;
 	}
-	
-	public ArrayList<Item> getMenuList() {
-		return menuList;
+
+	public ArrayList<Item> getMenuItemList() {
+		return menuItemList;
 	}
 
 }

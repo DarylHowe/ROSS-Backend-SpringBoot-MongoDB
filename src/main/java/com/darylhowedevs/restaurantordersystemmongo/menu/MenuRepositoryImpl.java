@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class MenuRepositoryImpl implements MenuRepositoryCustom {
-	
+
 	@Autowired
 	private MenuRepository menuRepository;
 
@@ -19,7 +19,6 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 				menu = menuList.get(i);
 			}
 		}
-
 		return menu;
 	}
 

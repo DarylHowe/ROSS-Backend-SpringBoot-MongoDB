@@ -3,52 +3,52 @@ package com.darylhowedevs.restaurantordersystemmongo.order;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import com.darylhowedevs.restaurantordersystemmongo.item.Item;
 
-
+/**
+ * Order - An order contains a list of items and information about the order
+ * such as an order ID, order table number, order price, whether it is ready to
+ * be served and a data of its time of creation.
+ */
 @Document(collection = "Kitchen")
 public class Order {
 
-	
 	@Id
 	private String orderId;
 	private static int orderNumberStatic;
-	
 	private int tableNumber;
 	private double totalPrice;
 	private List<Item> itemList = new ArrayList<>();
 	private boolean isReadyToBeServed = false;
 	private String timeStamp;
 	private Date date;
-	
-	
-	public Order() {	
-		orderId = Integer.toString(orderNumberStatic++);
-		date = new Date();
-		timeStamp = date.toString();
+
+	public Order() {
+		updateTotal();
+	}
+
+	public Order(int tableNumber) {
+		this.tableNumber = tableNumber;
+		initializeOrderDetails();
 		updateTotal();
 	}
 
 	public Order(int tableNumber, List<Item> itemList) {
 		this.tableNumber = tableNumber;
 		this.itemList = itemList;
-		orderId = Integer.toString(orderNumberStatic++);
-		date = new Date();
-		timeStamp = date.toString();
+		initializeOrderDetails();
 		updateTotal();
 	}
-	
 
-	public Order(int tableNumber) {
-		this.tableNumber = tableNumber;
+	/**
+	 * A method which sets an Orders ID and Date.
+	 */
+	private void initializeOrderDetails() {
 		orderId = Integer.toString(orderNumberStatic++);
 		date = new Date();
 		timeStamp = date.toString();
-		updateTotal();
 	}
 
 	public void addItem(Item item) {
@@ -79,7 +79,6 @@ public class Order {
 				break;
 			}
 		}
-
 		return item;
 	}
 
@@ -100,16 +99,14 @@ public class Order {
 		return totalPrice;
 	}
 
-	public void displayOrder() {
-		System.out.println("Table number : " + tableNumber);
-		System.out.println("Total items: " + itemList.size());
-		System.out.println("Status (isReadyToBeServed): " + isReadyToBeServed);
+	public double getTotalPrice() {
+		totalPrice = 0;
 
 		for (int i = 0; i < itemList.size(); i++) {
-			System.out.println(itemList.get(i));
+			double itemPrice = itemList.get(i).getItemPrice();
+			totalPrice += itemPrice;
 		}
-
-		System.out.println("Total price: " + updateTotal());
+		return totalPrice;
 	}
 
 	public void removeLastItem() {
@@ -126,16 +123,6 @@ public class Order {
 
 	public void setTableNumber(int tableNumber) {
 		this.tableNumber = tableNumber;
-	}
-
-	public double getTotalPrice() {
-		totalPrice = 0;
-
-		for (int i = 0; i < itemList.size(); i++) {
-			double itemPrice = itemList.get(i).getItemPrice();
-			totalPrice += itemPrice;
-		}
-		return totalPrice;
 	}
 
 	public void setTotalPrice(double total) {
@@ -180,5 +167,17 @@ public class Order {
 
 	public void setTimeStamp(String timeStamp) {
 		this.timeStamp = timeStamp;
+	}
+
+	public void displayOrder() {
+		System.out.println("Table number : " + tableNumber);
+		System.out.println("Total items: " + itemList.size());
+		System.out.println("Status (isReadyToBeServed): " + isReadyToBeServed);
+
+		for (int i = 0; i < itemList.size(); i++) {
+			System.out.println(itemList.get(i));
+		}
+
+		System.out.println("Total price: " + updateTotal());
 	}
 }

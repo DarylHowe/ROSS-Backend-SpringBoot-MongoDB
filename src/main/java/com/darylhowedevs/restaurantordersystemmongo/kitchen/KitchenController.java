@@ -34,21 +34,6 @@ public class KitchenController {
 	}
 
 	// http://localhost:8080/kitchen/addorder
-	/*
-	 	  { "tableNumber": 32,
-       "itemList": [ 
-           
-           {    "itemName": "Steak",
-                "itemPrice": 9.0,
-	            "itemType": "Main" 
-            },
-            {   "itemName": "Chips",
-                "itemPrice": 9.0,
-                "itemType":"Main" 
-            } 
-                    ] 
-        }
-	 */
 	@PostMapping("/addorder")
 	public void addOrder(@RequestBody Order order) {
 
@@ -68,24 +53,6 @@ public class KitchenController {
 
 		return kitchenRepository.findById(id);
 	}
-
-	/*
-	 * // http://localhost:8080/kitchen/orderisready/{tableNumber}
-	 * 
-	 * @PostMapping("orderisready/{tableNumber}") public Order
-	 * orderIsReady(@PathVariable int tableNumber) { Order order =
-	 * kitchenSerivce.orderIsReady(tableNumber); kitchenRepository.save(order);
-	 * return order; }
-	 * 
-	 * 
-	 * // http://localhost:8080/kitchen/orderisserved/{tableNumber} // Note: Order
-	 * must be set to 'ready' first before it can be set to as served. // Note: This
-	 * function removes the order from the Kitchen database.
-	 * 
-	 * @PostMapping("orderisserved/{tableNumber}") public void
-	 * orderIsServed(@PathVariable int tableNumber) {
-	 * kitchenSerivce.orderIsServed(tableNumber); }
-	 */
 
 	// http://localhost:8080/kitchen/orderisreadybyid/{id}
 	@PostMapping("orderisreadybyid/{id}")

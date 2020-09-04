@@ -1,36 +1,27 @@
 package com.darylhowedevs.restaurantordersystemmongo.item;
 
-
+/**
+ * Item - a class to represent a generic menu item. 
+ *
+ */
 public class Item {
 
 	protected static int itemIdStatic;
 	protected String itemId;
 	protected String itemName;
 	protected double itemPrice;
-	protected String note = null;
 	protected String itemType;
-	
 
+	// Default constructor needed for MongoDB
 	public Item() {
 		this.itemId = Integer.toString(itemIdStatic++);
 	}
 
-	
 	public Item(String itemName, double itemPrice, String itemType) {
 		this.itemName = itemName;
 		this.itemPrice = itemPrice;
 		this.itemType = itemType;
 		this.itemId = Integer.toString(itemIdStatic++);
-	}
-	
-
-	@Override
-	public String toString() {
-		if(note == null) {
-			return "Item name: " + itemName + "\n" + "Item price: "+ itemPrice;			
-		}else {
-			return "Item name: " + itemName + "\n" + "Item price: "+ itemPrice + "\n" + "Note: " + note;			
-		}
 	}
 
 	public String getItemName() {
@@ -49,14 +40,6 @@ public class Item {
 		this.itemPrice = price;
 	}
 
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}
-	
 	public String getItemType() {
 		return itemType;
 	}
@@ -64,7 +47,7 @@ public class Item {
 	public void setItemType(String itemType) {
 		this.itemType = itemType;
 	}
-	
+
 	public String getItemId() {
 		return itemId;
 	}
@@ -73,4 +56,9 @@ public class Item {
 		this.itemId = itemId;
 	}
 	
+	@Override
+	public String toString() {
+		return "Item name: " + itemName + "\n" + "Item price: " + itemPrice;
+	}
+
 }

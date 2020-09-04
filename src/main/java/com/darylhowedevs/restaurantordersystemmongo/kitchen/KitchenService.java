@@ -23,27 +23,20 @@ public class KitchenService {
 		Query query = new Query().addCriteria(Criteria.where("tableNumber").is(tableNumber));
 		Order order = mongoTemplate.findOne(query, Order.class);
 		return order.getItemList();
+	}
 
-	}
-	
-	public Order orderIsReady(int tableNumber) {
-		Query query = new Query().addCriteria(Criteria.where("tableNumber").is(tableNumber));
-		Order order = mongoTemplate.findOne(query, Order.class);
-		order.setIsReadyToBeServed(true);
-		return order;
-	}
-	
-	public void orderIsServed(int tableNumber) {
-		Query query = new Query().addCriteria(Criteria.where("tableNumber").is(tableNumber));
-		mongoTemplate.remove(query, Order.class);
-	}
-	
 	public Order orderIsReadyById(String id) {
 		Order order = mongoTemplate.findById(id, Order.class);
 		order.setIsReadyToBeServed(true);
 		return order;
 	}
 	
+	public Order orderIsNotReadyById(String id) {
+		Order order = mongoTemplate.findById(id, Order.class);
+		order.setIsReadyToBeServed(false);
+		return order;
+	}
+
 	public boolean orderIsServedById(String id) {
 		Order order = mongoTemplate.findById(id, Order.class);
 		boolean isReadyToBeServed = order.getIsReadyToBeServed();

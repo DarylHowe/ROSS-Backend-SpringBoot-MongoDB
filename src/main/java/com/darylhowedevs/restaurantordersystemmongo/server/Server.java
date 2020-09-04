@@ -8,40 +8,54 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.darylhowedevs.restaurantordersystemmongo.order.Order;
 
+/**
+ * Server - A server holds 3 lists. 1. 'Active Orders'. An active order has not
+ * yet been closed(ie has not yet been paid for).
+ * 
+ * 2. 'Closed Orders'. After an order has been closed (ie paid) the order will
+ * be removed from the 'Active Orders' list and added to the 'Closed Orders'
+ * list.
+ * 
+ * 3. 'Tables List'. A list of all the active table numbers.
+ *
+ */
 @Document(collection = "Servers")
 public class Server {
-
 
 	@Id
 	private String serverId;
 	private String serverName;
-	// Static can't be sent as JSON.
 	private static int staticId;
 	private ArrayList<Order> activeOrders = new ArrayList<>();
 	private ArrayList<Order> closedOrders = new ArrayList<>();
 	private ArrayList<Integer> tablesList = new ArrayList<>();
-	
-	
+
 	public Server(String serverName) {
 		this.serverName = serverName;
 		this.serverId = Integer.toString(staticId++);
 	}
 
+	/**
+	 * A method to add an order to the severs 'activeOrders' list. The table number
+	 * will also be added to the servers 'tablesList'.
+	 * 
+	 * @param order
+	 */
 	public void createOrder(Order order) {
 		activeOrders.add(order);
 		addTableToList(order.getTableNumber());
 	}
 
 	public List<Integer> addTableToList(int tableNumber) {
-		boolean isOnTableList = false;
+		boolean isAlreadyOnTableList = false;
 
 		for (int i = 0; i < tablesList.size(); i++) {
 			if (tablesList.get(i) == tableNumber) {
-				isOnTableList = true;
+				isAlreadyOnTableList = true;
 			}
 		}
 
-		if (!isOnTableList) {
+		if (!isAlreadyOnTableList) {
 			tablesList.add(tableNumber);
 		}
 
@@ -60,12 +74,19 @@ public class Server {
 		return orderList;
 	}
 
+	/**
+	 * A method which removes a table from the 'activeOrders' list and adds it to
+	 * the 'closedOrders' list. The table is also removed from the 'tablesList' as
+	 * it is no longer active.
+	 * 
+	 * @param tableNumber
+	 */
 	public void closeOrderByTableNumber(int tableNumber) {
 		for (int i = 0; i < activeOrders.size(); i++) {
 			if (activeOrders.get(i).getTableNumber() == tableNumber) {
 				closedOrders.add(activeOrders.get(i));
 				activeOrders.remove(i);
-				
+
 				// Also remove from table list.
 				removeTableFromTableList(tableNumber);
 			}
@@ -78,7 +99,6 @@ public class Server {
 				tablesList.remove(j);
 			}
 		}
-
 		return tablesList;
 	}
 
